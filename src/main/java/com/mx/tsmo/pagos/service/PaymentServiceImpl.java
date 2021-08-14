@@ -41,7 +41,7 @@ public class PaymentServiceImpl implements PaymentService {
         Stripe.apiKey = secretKey;
         PaymentIntent paymentIntent = PaymentIntent.retrieve(id);
         Map<String, Object> params = new HashMap<>();
-        params.put("payment_method", "pm_card_visa");
+        // params.put("payment_method", "pm_card_visa");
         paymentIntent.confirm(params);
         return paymentIntent;
     }
