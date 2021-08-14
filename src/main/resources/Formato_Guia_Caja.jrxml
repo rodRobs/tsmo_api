@@ -140,8 +140,8 @@ where e.id_envio = 81]]>
         <band height="71" splitType="Stretch">
             <image>
                 <reportElement x="0" y="4" width="190" height="56" uuid="c7dc6315-10c4-4d45-b3c6-0f46890386a5"/>
-                <!-- imageExpression><![CDATA["/Users/Joshue/Desktop/php/img/logo-black.png"]]></imageExpression -->
-                <imageExpression><![CDATA["C:/Users/Administrador/Documents/img/logo-black.png"]]></imageExpression>
+                <imageExpression><![CDATA["/Users/Joshue/Desktop/php/img/logo-black.png"]]></imageExpression>
+                <!--imageExpression><![CDATA["C:/Users/Administrador/Documents/img/logo-black.png"]]></imageExpression-->
             </image>
             <staticText>
                 <reportElement x="193" y="4" width="187" height="16" uuid="8f381b69-4083-403e-9324-18ab10ef75ce"/>
