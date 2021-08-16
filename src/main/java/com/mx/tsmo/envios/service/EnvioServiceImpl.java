@@ -355,6 +355,11 @@ public class EnvioServiceImpl implements EnvioService {
         return null;
     }
 
+    @Override
+    public Envio buscarPorGuiaProveedor(String guia) {
+        return envioDao.findByGuiaProveedor(guia);
+    }
+
     public Map<String, String> fechas() {
         log.info("Prueba fechas");
         Date date = new Date();

@@ -85,4 +85,7 @@ public interface EnvioDao extends JpaRepository<Envio, Long>, EnvioCustomDao {
 
     // Envios Mensuales
     long countByCreateAtAfterAndCreateAtBefore(Date inicio, Date fin);
+    // Envio Proveedor
+    Envio findByGuiaProveedor(String guiaProveedor);
+
 }

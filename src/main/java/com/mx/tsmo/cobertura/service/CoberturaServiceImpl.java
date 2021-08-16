@@ -39,15 +39,17 @@ public class CoberturaServiceImpl implements CoberturaService{
             ResteasyClient client = new ResteasyClientBuilder().build();
             //WebTarget target = client.target(EnviaAuth.URL.toString()+COBERTURA);
             WebTarget target = client.target(EnviaAuth.URL_PROD.toString()+COBERTURA);
+            log.info("URL: "+EnviaAuth.URL.toString()+COBERTURA);
             String cliente = EnviaAuth.CLIENTE_CARGA_NORMAL.toString();
             String user = EnviaAuth.USER_CARGA_NORMAL.toString();
             String pass = EnviaAuth.PASS_CARGA_NORMAL.toString();
 
             Invocation.Builder solicitud = target.request();
-            //String encodedString = Base64.getEncoder().encodeToString((EnviaAuth.USER.toString()+":"+EnviaAuth.PASS.toString()).getBytes());
+            // String encodedString = Base64.getEncoder().encodeToString((EnviaAuth.USER.toString()+":"+EnviaAuth.PASS.toString()).getBytes());
             String encodedString = Base64.getEncoder().encodeToString((user+":"+pass).getBytes());
             solicitud.header("Authorization", "Basic "+encodedString);
             solicitud.header("Content-Type", "application/json");
+            log.info("AuthorizationBasic "+encodedString);
             Gson gson = new Gson();
             String jsonString = gson.toJson(cobertura);
             log.info("JSON Cotizacion: " + jsonString);
