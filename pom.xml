@@ -169,6 +169,7 @@
 	</dependencies>
 
 	<build>
+		<finalName>TSMOApp</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
