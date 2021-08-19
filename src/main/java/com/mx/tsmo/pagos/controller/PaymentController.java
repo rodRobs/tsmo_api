@@ -39,6 +39,10 @@ public class PaymentController {
     public ResponseEntity<String> cancel(@PathVariable("id") String id) throws StripeException {
         log.info("Entra a servicio para cancel");
         PaymentIntent paymentIntent = paymentService.cancel(id);
+        if (paymentIntent == null) {
+            log.error("Hubo error");
+            return new ResponseEntity<String>("No se pudo concretar", HttpStatus.BAD_REQUEST);
+        }
         String paymentStr = paymentIntent.toJson();
         return new ResponseEntity<String>(paymentStr, HttpStatus.OK);
     }

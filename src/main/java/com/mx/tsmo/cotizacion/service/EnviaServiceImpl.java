@@ -4,11 +4,13 @@ import com.google.gson.Gson;
 import com.mx.tsmo.cotizacion.model.domain.*;
 import com.mx.tsmo.cotizacion.model.dto.*;
 import com.mx.tsmo.enums.EnviaAuth;
+import com.mx.tsmo.enums.TipoServicio;
 import com.mx.tsmo.envios.model.dto.PostCancelacion;
 import com.mx.tsmo.envios.model.dto.ResponseCancelacion;
 import lombok.extern.slf4j.Slf4j;
 import org.jboss.resteasy.client.jaxrs.ResteasyClient;
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.ws.rs.client.Entity;
@@ -25,6 +27,9 @@ public class EnviaServiceImpl implements EnviaService {
 
     private static final String COTIZACION = "Cotizador/CotizaCliente";
     private static final String CANCELACION = "Cancelacion/Cancelar";
+
+    @Autowired
+    private CoberturaTSMOService coberturaService;
 
     //public String cotizacion(Cotizacion cotizacion) {
     //public Costo[] cotizacion(Cotizacion cotizacion) {
@@ -54,8 +59,9 @@ public class EnviaServiceImpl implements EnviaService {
                     break;
             }
 
-            //cotizacionEnvia.setCuenta(EnviaAuth.CLIENTE.toString());
-            cotizacionEnvia.setCuenta(cliente);
+
+            cotizacionEnvia.setCuenta(EnviaAuth.CLIENTE.toString());
+            //cotizacionEnvia.setCuenta(cliente);
             ResteasyClient client = new ResteasyClientBuilder().build();
 
             WebTarget target = client.target(EnviaAuth.URL.toString()+COTIZACION);

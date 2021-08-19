@@ -42,6 +42,7 @@ public class NotificacionService {
     private static final String ASUNTO_ALTA_OPERADOR = "TSMO: Datos de acceso a sistema de TSMO";
 
     private static final String path = "/Users/Joshue/Desktop/";
+    
     private static final String nombreFinalEnvio = "formato_envio";
 
     @Autowired

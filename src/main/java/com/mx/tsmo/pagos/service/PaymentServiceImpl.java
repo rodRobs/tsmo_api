@@ -4,6 +4,7 @@ import com.mx.tsmo.pagos.dto.PaymentIntentDto;
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
 import com.stripe.model.PaymentIntent;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
+@Slf4j
 public class PaymentServiceImpl implements PaymentService {
 
     @Value("${stripe.key.secret}")
@@ -37,13 +39,19 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public PaymentIntent confirm(String id) throws StripeException {
+    public PaymentIntent confirm(String id) {
         Stripe.apiKey = secretKey;
-        PaymentIntent paymentIntent = PaymentIntent.retrieve(id);
-        Map<String, Object> params = new HashMap<>();
-        // params.put("payment_method", "pm_card_visa");
-        paymentIntent.confirm(params);
-        return paymentIntent;
+        try {
+            PaymentIntent paymentIntent = PaymentIntent.retrieve(id);
+            Map<String, Object> params = new HashMap<>();
+            params.put("payment_method", "pm_card_visa");
+            paymentIntent.confirm(params);
+            return paymentIntent;
+        } catch (StripeException se) {
+            log.error("ERROR: Stripe Exception: "+se.getMessage());
+            se.getStackTrace();
+            return null;
+        }
     }
 
     @Override

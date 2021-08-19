@@ -31,6 +31,7 @@ public class RastreoEnviaServiceImpl {
         try {
             ResteasyClient client = new ResteasyClientBuilder().build();
 
+            //WebTarget target = client.target(EnviaAuth.URL_PROD.toString()+RASTREO);;
             WebTarget target = client.target(EnviaAuth.URL.toString()+RASTREO);
 
             Invocation.Builder solicitud = target.request();

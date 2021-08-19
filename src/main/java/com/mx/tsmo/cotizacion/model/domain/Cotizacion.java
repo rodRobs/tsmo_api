@@ -41,6 +41,7 @@ public class Cotizacion  {
     private Date createAt;
     private String realiza;
     private String tipoServicio;
+    private String recoleccion;
 
     public String toString() {
         return "id: " + id + "\n"

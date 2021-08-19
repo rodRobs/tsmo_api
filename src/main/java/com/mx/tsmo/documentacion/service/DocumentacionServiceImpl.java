@@ -5,12 +5,14 @@ import com.mx.tsmo.cotizacion.model.domain.Detalle;
 import com.mx.tsmo.cotizacion.model.domain.Dimensiones;
 import com.mx.tsmo.cotizacion.model.dto.DetalleDto;
 import com.mx.tsmo.cotizacion.model.dto.DimensionesDto;
+import com.mx.tsmo.cotizacion.service.CoberturaTSMOService;
 import com.mx.tsmo.cotizacion.service.CotizacionService;
 import com.mx.tsmo.documentacion.model.dao.DocumentacionRepository;
 import com.mx.tsmo.documentacion.model.dto.Documentacion;
 import com.mx.tsmo.documentacion.model.dto.Guia;
 import com.mx.tsmo.documentacion.timertask.RastreoEnviaTask;
 import com.mx.tsmo.enums.EnviaAuth;
+import com.mx.tsmo.enums.TipoServicio;
 import lombok.extern.slf4j.Slf4j;
 import org.jboss.resteasy.client.jaxrs.ResteasyClient;
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
@@ -36,6 +38,9 @@ public class DocumentacionServiceImpl implements DocumentacionService {
 
     @Autowired
     private CotizacionService cotizacionService;
+
+    @Autowired
+    private CoberturaTSMOService coberturaService;
 
     @Override
     public Guia preDocumentacion(Documentacion documentacion) {
@@ -79,10 +84,19 @@ public class DocumentacionServiceImpl implements DocumentacionService {
                     break;
             }
 
+            // Verfificamos si recoleccion hace TSMO
+            documentacion.getOpciones().setTipoServicio("3");
+            if (coberturaService.existeCobertura(documentacion.getOrigen().getDomicilio().getCodigoPostal())) {
+                documentacion.getServicios().setServicio(TipoServicio.ORDINARIO.getValue());
+            } else {
+                documentacion.getServicios().setServicio(TipoServicio.RECOLECCION_A_DOMICILIO.getValue());
+            }
+
             Invocation.Builder solicitud = target.request();
             String encodedString = Base64.getEncoder().encodeToString((EnviaAuth.USER.toString()+":"+EnviaAuth.PASS.toString()).getBytes());
             // String encodedString = Base64.getEncoder().encodeToString((user+":"+pass).getBytes());
-            documentacion.setCuenta(cliente);
+            //documentacion.setCuenta(cliente);
+            documentacion.setCuenta(EnviaAuth.CLIENTE.toString());
             solicitud.header("Authorization", "Basic "+encodedString);
             solicitud.header("Content-Type", "application/json");
 
