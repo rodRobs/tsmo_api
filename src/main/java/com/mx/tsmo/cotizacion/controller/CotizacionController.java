@@ -121,6 +121,7 @@ public class CotizacionController {
             costo.setTipoServicio("ESTÁNDAR NACIONAL");
             costo.setFCompromisoEntrega("1 a 4 días hábiles");
             costo.setRealiza("TSMO");
+            costo.setCostoTotal(cotizacionService.calculoCostoFinalTSMO(cotizacion, costo.getCostoTotal()));
         } else {
             log.info("Cotizacion Foranea");
             Response post = enviaService.calcularEnvia(cotizacion, tipoCarga);

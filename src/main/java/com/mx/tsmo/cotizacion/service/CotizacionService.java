@@ -32,6 +32,7 @@ public interface CotizacionService {
     boolean seguro(Servicio servicio);
     boolean recoleccion(Servicio servicio);
     double calculoCostoFinal(Cotizacion cotizacion, double costo);
+    double calculoCostoFinalTSMO(Cotizacion cotizacion, double costo);
 
 }
 

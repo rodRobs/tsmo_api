@@ -439,4 +439,22 @@ public class CotizacionServiceImpl implements CotizacionService {
         return costo;
     }
 
+    @Override
+    public double calculoCostoFinalTSMO(Cotizacion cotizacion, double costo) {
+        if (cotizacion.getServicios().size() > 0) {
+            for (Servicio servicio : cotizacion.getServicios()) {
+                switch(servicio.getServicio()) {
+                    case "SEG":
+                        costo = costo + SEGURO;
+                        break;
+                    case "RDO":
+                        costo = costo + RECOLECCION;
+                        break;
+                }
+            }
+        }
+        return costo;
+    }
+
+
 }
