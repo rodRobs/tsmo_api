@@ -40,9 +40,9 @@ public class NotificacionController {
             notificacionService.envioCorreoFormatoSolicitud(envio);
         } catch (MailException me) {
             log.error("ERROR: ");
-            return new ResponseEntity("ERROR: No se pudo enviar", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity("ERROR: No se pudo enviar el correo, comunicarse con soporte técnico para el reenvio del correo con los datos del ", HttpStatus.BAD_REQUEST);
         }
-        return ResponseEntity.ok("Envio exitoso");
+        return ResponseEntity.ok("Se ha enviado correctamente el correo");
         /*
         try {
             notificacionService.enviarNotificacion(envioBD.getCliente().getCorreo(), notificacionService.crearMensajeDeEnvioGuia(envioBD), TipoEnvioCorreo.ENVIO.getValue());

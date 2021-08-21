@@ -19,13 +19,13 @@ import java.util.Map;
 @Slf4j
 public class DocumentoService {
 
-    // private static final String nombreArchivoEnvio = "classpath:Formato_Envio.jrxml";
-    // private static final String nombreArchivoGuia = "classpath:Formato_Guia_caja.jrxml";
-    private static final String nombreArchivoGuia = "C:/Program Files/Apache Software Foundation/Tomcat 9.0/webapps/crud-0.0.1-SNAPSHOT/WEB-INF/classes/Formato_Guia_caja.jrxml";
-    private static final String nombreArchivoEnvio = "C:/Program Files/Apache Software Foundation/Tomcat 9.0/webapps/crud-0.0.1-SNAPSHOT/WEB-INF/classes/Formato_Envio.jrxml";
+    private static final String nombreArchivoEnvio = "classpath:Formato_Envio.jrxml";
+    private static final String nombreArchivoGuia = "classpath:Formato_Guia_caja.jrxml";
+    // private static final String nombreArchivoGuia = "C:/Program Files/Apache Software Foundation/Tomcat 9.0/webapps/TSMOApp/WEB-INF/classes/Formato_Guia_caja.jrxml";
+    // private static final String nombreArchivoEnvio = "C:/Program Files/Apache Software Foundation/Tomcat 9.0/webapps/crud-0.0.1-SNAPSHOT/WEB-INF/classes/Formato_Envio.jrxml";
 
-    // private static final String path = "/Users/Joshue/Desktop/";
-    private static final String path = "C:/Users/Administrador/Documents/";
+    private static final String path = "/Users/Joshue/Desktop/";
+    // private static final String path = "C:/Users/Administrador/Documents/";
     private static final String nombreFinalEnvio = "formato_envio";
 
     /*

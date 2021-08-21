@@ -1,4 +1,4 @@
-package com.mx.tsmo.documentacion.model.domain;
+package com.mx.tsmo.cotizacion.model.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,10 +20,16 @@ public class Servicio implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_serivicios")
     private Long id;
-    private short servicio;
+    private String servicio;
     private double valor;
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "create_at", nullable = false)
     private Date createAt;
+
+    public String toString() {
+        return " servicio = " + servicio +
+                " valor = " + valor +
+                " create_at = " + createAt;
+    }
 
 }

@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.mx.tsmo.cotizacion.model.dao.CotizacionRepository;
 import com.mx.tsmo.cotizacion.model.domain.*;
 import com.mx.tsmo.cotizacion.model.dto.DistanciaEntreCiudades;
+import com.mx.tsmo.documentacion.model.dto.Servicios;
 import com.mx.tsmo.enums.TipoCarga;
 import com.mx.tsmo.enums.TipoClase;
 import com.mx.tsmo.enums.TipoTraslado;
@@ -32,6 +33,10 @@ public class CotizacionServiceImpl implements CotizacionService {
     private static final String CDMX = "Ciudad de México";
     private static final String EDOMX = "México";
 
+    private static final double RECOLECCION = 25.056;
+    private static final double SEGURO = 23.2;
+    private static final double UTILIDAD = 1.3;
+
     //int contador = 0;
 
     @Autowired
@@ -59,6 +64,12 @@ public class CotizacionServiceImpl implements CotizacionService {
         cotizacion.getOrigen().getDomicilio().setCreateAt(new Date());
         cotizacion.getDestino().getDomicilio().setCreateAt(new Date());
         cotizacion.getDetalle().get(0).getDimensiones().setCreateAt(new Date());
+        if (cotizacion.getServicios().size() > 0) {
+            for (Servicio servicio : cotizacion.getServicios()) {
+                log.info("Servicio: " + servicio.getServicio());
+                servicio.setCreateAt(new Date());
+            }
+        }
         // log.info(""+cotizacion.getOrigen().getTelefonos().get(0).toString());
         return cotizacionRepository.save(cotizacion);
     }
@@ -390,6 +401,42 @@ public class CotizacionServiceImpl implements CotizacionService {
                 .combustible(carga.getCxc())
                 .costoTotal(carga.getUtilidad())
                 .build();
+    }
+
+    @Override
+    public boolean seguro(Servicio servicio) {
+        return servicio.getServicio().equalsIgnoreCase("SEG");
+    }
+
+    @Override
+    public boolean recoleccion(Servicio servicio) {
+        return servicio.getServicio().equalsIgnoreCase("RDO");
+    }
+
+    @Override
+    public double calculoCostoFinal(Cotizacion cotizacion, double costo) {
+        boolean seguro = false;
+        boolean recoleccion = false;
+        if (cotizacion.getServicios().size() > 0) {
+            for (Servicio servicio : cotizacion.getServicios()) {
+               switch(servicio.getServicio()) {
+                   case "SEG":
+                       seguro = true;
+                       costo = costo - SEGURO;
+                       break;
+                   case "RDO":
+                       recoleccion = true;
+                       costo = costo - RECOLECCION;
+                       break;
+               }
+            }
+        }
+        costo = costo * UTILIDAD;
+        if (seguro)
+            costo = costo + SEGURO;
+        if (recoleccion)
+            costo = costo + RECOLECCION;
+        return costo;
     }
 
 }

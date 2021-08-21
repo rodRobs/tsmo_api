@@ -3,6 +3,7 @@ package com.mx.tsmo.cotizacion.service;
 import com.mx.tsmo.cotizacion.model.domain.Costo;
 import com.mx.tsmo.cotizacion.model.domain.Cotizacion;
 import com.mx.tsmo.cotizacion.model.domain.Detalle;
+import com.mx.tsmo.cotizacion.model.domain.Servicio;
 import com.mx.tsmo.cotizacion.model.dto.CargaDto;
 import com.mx.tsmo.domain.dtos.CotizacionDto;
 
@@ -28,6 +29,9 @@ public interface CotizacionService {
     public Costo seleccionarServicioCosto(int tipoCarga, int tipoDistancia, int peso, int distancia);
     public Costo seleccionarServicioCosto(int tipoCarga, int peso);
     public Costo getCosto(CargaDto carga);
+    boolean seguro(Servicio servicio);
+    boolean recoleccion(Servicio servicio);
+    double calculoCostoFinal(Cotizacion cotizacion, double costo);
 
 }
 

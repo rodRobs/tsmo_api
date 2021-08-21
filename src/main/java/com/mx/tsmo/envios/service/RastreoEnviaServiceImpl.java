@@ -31,10 +31,12 @@ public class RastreoEnviaServiceImpl {
         try {
             ResteasyClient client = new ResteasyClientBuilder().build();
 
-            WebTarget target = client.target(EnviaAuth.URL.toString()+RASTREO);
+            WebTarget target = client.target(EnviaAuth.URL_PROD.toString()+RASTREO);;
+            //WebTarget target = client.target(EnviaAuth.URL.toString()+RASTREO);
 
             Invocation.Builder solicitud = target.request();
-            String encodedString = Base64.getEncoder().encodeToString((EnviaAuth.USER.toString()+":"+EnviaAuth.PASS.toString()).getBytes());
+            // String encodedString = Base64.getEncoder().encodeToString((EnviaAuth.USER.toString()+":"+EnviaAuth.PASS.toString()).getBytes());
+            String encodedString = Base64.getEncoder().encodeToString((EnviaAuth.USER_CARGA_NORMAL.toString()+":"+EnviaAuth.PASS_CARGA_NORMAL.toString()).getBytes());
 
             solicitud.header("Authorization", "Basic "+encodedString);
             solicitud.header("Content-Type", "application/json");
