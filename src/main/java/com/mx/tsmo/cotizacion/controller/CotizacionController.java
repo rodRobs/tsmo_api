@@ -117,15 +117,15 @@ public class CotizacionController {
         int tipoCarga = cotizacionService.getTipoCarga(peso);
         if (coberturaTSMOService.local(cotizacion.getOrigen().getDomicilio().getCodigoPostal(), cotizacion.getDestino().getDomicilio().getCodigoPostal())) {
             log.info("Cotizacion Local");
-
-
             costo = cotizacionService.seleccionarServicioCosto(tipoCarga,(int) peso);
-            costo.setTipoServicio("1 a 4 días hábiles");
+            costo.setTipoServicio("ESTÁNDAR NACIONAL");
+            costo.setFCompromisoEntrega("1 a 4 días hábiles");
             costo.setRealiza("TSMO");
         } else {
             log.info("Cotizacion Foranea");
             Response post = enviaService.calcularEnvia(cotizacion, tipoCarga);
             String responseJson = post.readEntity(String.class);
+            log.info("Response Json: "+responseJson);
             log.info("Estatus: " + post.getStatus());
             switch (post.getStatus()) {
                 case 200:
@@ -135,8 +135,9 @@ public class CotizacionController {
                     for (Costo cotizacionResponse : cotizacionRes) {
                         log.info(cotizacionResponse.toString());
                         costo = cotizacionResponse;
-                        costo.setCostoTotal(costo.getTotal()*1.3);
+                        costo.setCostoTotal(cotizacionService.calculoCostoFinal(cotizacion, costo.getTotal()));
                         costo.setRealiza("ENVIA");
+                        // costo.setFCompromisoEntrega(cotizacionResponse.getCompromisoEntrega());
                     }
                     break;
                 case 500:

@@ -60,17 +60,17 @@ public class EnviaServiceImpl implements EnviaService {
             }
 
 
-            cotizacionEnvia.setCuenta(EnviaAuth.CLIENTE.toString());
-            //cotizacionEnvia.setCuenta(cliente);
+            //cotizacionEnvia.setCuenta(EnviaAuth.CLIENTE.toString());
+            cotizacionEnvia.setCuenta(cliente);
             ResteasyClient client = new ResteasyClientBuilder().build();
 
-            WebTarget target = client.target(EnviaAuth.URL.toString()+COTIZACION);
-            // WebTarget target = client.target(EnviaAuth.URL_PROD.toString()+COTIZACION);
+            //WebTarget target = client.target(EnviaAuth.URL.toString()+COTIZACION);
+            WebTarget target = client.target(EnviaAuth.URL_PROD.toString()+COTIZACION);
             //log.info("URL: "+EnviaAuth.URL.toString()+COTIZACION);
             log.info("URL: "+EnviaAuth.URL_PROD.toString()+COTIZACION);
             Invocation.Builder solicitud = target.request();
-            String encodedString = Base64.getEncoder().encodeToString((EnviaAuth.USER.toString()+":"+EnviaAuth.PASS.toString()).getBytes());
-            //String encodedString = Base64.getEncoder().encodeToString((user+":"+pass).getBytes());
+            // String encodedString = Base64.getEncoder().encodeToString((EnviaAuth.USER.toString()+":"+EnviaAuth.PASS.toString()).getBytes());
+            String encodedString = Base64.getEncoder().encodeToString((user+":"+pass).getBytes());
             solicitud.header("Authorization", "Basic "+encodedString);
             log.info("Authorization: Basic "+encodedString);
             solicitud.header("Content-Type", "application/json");
@@ -116,7 +116,7 @@ public class EnviaServiceImpl implements EnviaService {
             res = e.getMessage();
         }
 
-        log.info(res);
+        log.info("Res: "+res);
 
         return null;
 
@@ -234,6 +234,7 @@ public class EnviaServiceImpl implements EnviaService {
                         ).build()
                 ).
                 detalle(cotizacion.getDetalle())
+                .servicios(cotizacion.getServicios())
                 .build();
     }
 

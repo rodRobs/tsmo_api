@@ -41,7 +41,10 @@ public class Cotizacion  {
     private Date createAt;
     private String realiza;
     private String tipoServicio;
-    private String recoleccion;
+
+    @OneToMany(cascade = {CascadeType.ALL})
+    @JoinColumn(name = "id_cotizacion")
+    private List<Servicio> servicios;
 
     public String toString() {
         return "id: " + id + "\n"
@@ -50,6 +53,7 @@ public class Cotizacion  {
                 + " origen: " + origen + "\n"
                 + " destino: " + destino + "\n"
                 + " detalle: " + detalle + "\n"
-                + " realiza: " + realiza;
+                + " realiza: " + realiza + "\n"
+                + " servicios: " + servicios ;
     }
 }

@@ -55,4 +55,5 @@ public class Costo implements Serializable {
     @Column(name = "create_at", nullable = false)
     private Date createAt;
     private String realiza;
+    private String fCompromisoEntrega;
 }

@@ -23,7 +23,6 @@ public enum EnviaAuth {
     CLIENTE_LTL("1000251")
     ;
 
-
     private String data;
     private EnviaAuth(String data) {
         this.data = data;

@@ -141,8 +141,8 @@ where e.id_envio = 63]]>
         <band height="45" splitType="Stretch">
             <image>
                 <reportElement x="0" y="0" width="170" height="44" uuid="fc06c1fa-8eca-4e09-a83b-7a9a323d3f34"/>
-                <imageExpression><![CDATA["/Users/Joshue/Desktop/php/img/logo-black.png"]]></imageExpression>
-                <!--imageExpression><![CDATA["C:/Users/Administrador/Documents/img/logo-black.png"]]></imageExpression-->
+                <!--imageExpression><![CDATA["/Users/Joshue/Desktop/php/img/logo-black.png"]]></imageExpression-->
+                <imageExpression><![CDATA["C:/Users/Administrador/Documents/img/logo-black.png"]]></imageExpression>
             </image>
         </band>
     </title>

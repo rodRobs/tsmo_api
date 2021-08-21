@@ -1,7 +1,7 @@
 package com.mx.tsmo.documentacion.model.domain;
 
-import com.mx.tsmo.clientes.model.domain.Cliente;
 import com.mx.tsmo.cotizacion.model.domain.Cotizacion;
+import com.mx.tsmo.cotizacion.model.domain.Servicio;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,9 +25,9 @@ public class Documentacion implements Serializable {
     private String referencia1;
     private String referencia2;
     private String contiene;
-    @OneToOne
+    /*@OneToOne
     @JoinColumn(name = "id_servicios")
-    private Servicio servicios;
+    private Servicio servicios;*/
     @OneToOne
     @JoinColumn(name = "id_cotizacion")
     private Cotizacion cotizacion;
