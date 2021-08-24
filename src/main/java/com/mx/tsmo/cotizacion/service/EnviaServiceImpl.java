@@ -41,6 +41,7 @@ public class EnviaServiceImpl implements EnviaService {
             String cliente = "";
             String user = "";
             String pass = "";
+            log.info("Tipo de Carga: "+tipoCarga);
             switch(tipoCarga) {
                 case 1:
                     cliente = EnviaAuth.CLIENTE_CARGA_NORMAL.toString();
@@ -212,7 +213,7 @@ public class EnviaServiceImpl implements EnviaService {
         return Cotizacion.builder().
                 opciones(
                         Opciones.builder()
-                                .tipoEnvio(cotizacion.getOpciones().getTipoEnvio())
+                                .tipoEnvio((cotizacion.getOpciones().getTipoEnvio().equalsIgnoreCase("L")) ? "P" : cotizacion.getOpciones().getTipoEnvio())
                                 .tipoEntrega(cotizacion.getOpciones().getTipoEntrega())
                         .build()
                 ).
