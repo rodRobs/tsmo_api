@@ -18,6 +18,6 @@ public class Opciones implements Serializable {
     private String tipoEnvio;
     private String tipoEntrega;
     private String tipoServicio;
-    private String tipoCorreo;
+    private String tipoCobro;
 
 }

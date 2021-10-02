@@ -50,8 +50,10 @@ public class EnviaServiceImpl implements EnviaService {
                     break;
                 case 2:
                     cliente = EnviaAuth.CLIENTE_CARGA_PESADA.toString();
-                    user = EnviaAuth.USER_CARGA_PESADA.toString();
-                    pass = EnviaAuth.PASS_CARGA_PESADA.toString();
+                    // user = EnviaAuth.USER_CARGA_PESADA.toString();
+                    // pass = EnviaAuth.PASS_CARGA_PESADA.toString();
+                    user = EnviaAuth.USER_CARGA_NORMAL.toString();
+                    pass = EnviaAuth.PASS_CARGA_NORMAL.toString();
                     break;
                 case 3:
                     cliente = EnviaAuth.CLIENTE_LTL.toString();

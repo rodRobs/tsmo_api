@@ -35,6 +35,7 @@ public class CancelacionController {
             log.info("No existe envio con ese número de guia");
             return new ResponseEntity("ERROR: No existe envío con ese número de guía, favor de verificar el número de guía", HttpStatus.BAD_REQUEST);
         }
+
         Cancelacion cancelacionBD = cancelacionService.cancelacion(envio, postCancelacion);
         if (cancelacionBD == null) {
             log.info("ERROR: No se puedo cancelar");
@@ -42,6 +43,8 @@ public class CancelacionController {
         }
         return ResponseEntity.ok(cancelacionBD);
     }
+
+
 
 
 

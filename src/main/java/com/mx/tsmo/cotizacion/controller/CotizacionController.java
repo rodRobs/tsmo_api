@@ -121,8 +121,13 @@ public class CotizacionController {
             costo.setTipoServicio("ESTÁNDAR NACIONAL");
             costo.setFCompromisoEntrega("1 a 4 días hábiles");
             costo.setRealiza("TSMO");
+            costo.setPesoVolumetrico(cotizacionService.getPesoVolumetrico(cotizacion.getDetalle().get(0)));
             costo.setCostoTotal(cotizacionService.calculoCostoFinalTSMO(cotizacion, costo.getCostoTotal()));
         } else {
+            return new ResponseEntity("TSMO no tiene cobertura en los codigos postales solicitados", HttpStatus.BAD_REQUEST);
+        }
+
+        /*else {
             log.info("Cotizacion Foranea");
             Response post = enviaService.calcularEnvia(cotizacion, tipoCarga);
             String responseJson = post.readEntity(String.class);
@@ -145,7 +150,7 @@ public class CotizacionController {
                     log.info("ResJson: " + responseJson);
                     return new ResponseEntity(responseJson, HttpStatus.BAD_REQUEST);
             }
-        }
+        }*/
         if (costo == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }

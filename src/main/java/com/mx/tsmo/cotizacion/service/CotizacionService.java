@@ -33,6 +33,7 @@ public interface CotizacionService {
     boolean recoleccion(Servicio servicio);
     double calculoCostoFinal(Cotizacion cotizacion, double costo);
     double calculoCostoFinalTSMO(Cotizacion cotizacion, double costo);
+    double getPesoVolumetrico(Detalle detalle);
 
 }
 

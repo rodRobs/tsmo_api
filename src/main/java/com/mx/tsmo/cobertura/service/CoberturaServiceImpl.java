@@ -84,6 +84,11 @@ public class CoberturaServiceImpl implements CoberturaService{
         return null;
     }
 
+    @Override
+    public boolean coberturaCP(String cp) {
+        return false;
+    }
+
     public boolean local() {
         return false;
     }

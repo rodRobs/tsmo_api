@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.jboss.resteasy.client.jaxrs.ResteasyClient;
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,7 +43,8 @@ public class CoberturaController {
             CoberturaResponse[] responses = {this.armarCoberturaResponseLocal()};
             return ResponseEntity.ok(responses);
         } else {
-            return ResponseEntity.ok(coberturaService.coberturaENVIA(cobertura));
+            return new ResponseEntity("TSMO no tiene cobertura en los códigos postales ingresados.", HttpStatus.BAD_REQUEST);
+            // return ResponseEntity.ok(coberturaService.coberturaENVIA(cobertura));
         }
     }
 
@@ -52,5 +54,14 @@ public class CoberturaController {
                 .isOcurre(true)
                 .tipoServicio("1 a 4 días hábiles")
                 .build();
+    }
+
+    @PostMapping("cp")
+    public ResponseEntity<Boolean> coberturaCP(@RequestBody String codigoPostal) {
+        log.info("Entra a controlador para validar cobertura de un codigo postal");
+        if (coberturaTSMOService.existeCobertura(codigoPostal)) {
+            return ResponseEntity.ok(true);
+        }
+        return ResponseEntity.ok(false);
     }
 }

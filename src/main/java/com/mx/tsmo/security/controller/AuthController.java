@@ -80,6 +80,13 @@ public class AuthController {
                 case "Operador":
                     roles.add(rolService.getByRolNombre(RolNombre.ROL_OPERADOR).get());
                     break;
+                case "operaciones":
+                    roles.add(rolService.getByRolNombre(RolNombre.ROL_OPERACIONES).get());
+                    break;
+                case "cliente":
+                    roles.add(rolService.getByRolNombre(RolNombre.ROL_CLIENTE).get());
+                    break;
+                    
             }
         }
         //roles.add(nuevoUsuario.getRoles())

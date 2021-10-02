@@ -25,7 +25,7 @@ public class Documentacion implements Serializable {
     private Origen origen;
     private Destino destino;
     private List<DetalleDto> detalle;
-    private Servicios servicios;
+    private List<Servicios> servicios;
 
     public String toString() {
         return "Cuenta: " + cuenta +

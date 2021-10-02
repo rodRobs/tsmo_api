@@ -28,11 +28,17 @@ public class PaymentController {
     }
 
     @PostMapping("/confirm/{id}")
-    public ResponseEntity<String> confirm(@PathVariable("id") String id) throws StripeException {
-        log.info("Entra a servicio para confirm");
-        PaymentIntent paymentIntent = paymentService.confirm(id);
-        String paymentStr = paymentIntent.toJson();
-        return new ResponseEntity<String>(paymentStr, HttpStatus.OK);
+    public ResponseEntity<String> confirm(@PathVariable("id") String id) {
+        log.info("Entra a servicio para confirm, id: "+id);
+        try {
+            PaymentIntent paymentIntent = paymentService.confirm(id);
+            String paymentStr = paymentIntent.toJson();
+            return new ResponseEntity<String>(paymentStr, HttpStatus.OK);
+        } catch (StripeException se) {
+            log.error(se.getMessage());
+            se.printStackTrace();
+            return new ResponseEntity<String>("No se pudo concretar el pago", HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PostMapping("/cancel/{id}")

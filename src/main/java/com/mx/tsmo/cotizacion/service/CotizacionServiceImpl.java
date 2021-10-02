@@ -257,10 +257,10 @@ public class CotizacionServiceImpl implements CotizacionService {
         System.out.println("Peso: "+peso);
         System.out.println("Peso >= 200: "+(peso>=200));
         System.out.println("Peso >= 60: "+(peso>=60));
-        if (peso >= 200.00) {
+        if (peso > 200.00) {
             log.info("Carga LTL");
             return TipoCarga.LTL.getValue();
-        } else if (peso >= 60.00) {
+        } else if (peso > 60.00) {
             log.info("Carga PESADO");
             return TipoCarga.PESADO.getValue();
         } else {
@@ -417,7 +417,7 @@ public class CotizacionServiceImpl implements CotizacionService {
     public double calculoCostoFinal(Cotizacion cotizacion, double costo) {
         boolean seguro = false;
         boolean recoleccion = false;
-        if (cotizacion.getServicios().size() > 0) {
+        /*if (cotizacion.getServicios().size() > 0) {
             for (Servicio servicio : cotizacion.getServicios()) {
                switch(servicio.getServicio()) {
                    case "SEG":
@@ -435,8 +435,8 @@ public class CotizacionServiceImpl implements CotizacionService {
         if (seguro)
             costo = costo + SEGURO;
         if (recoleccion)
-            costo = costo + RECOLECCION;
-        return costo;
+            costo = costo + RECOLECCION;*/
+        return costo * UTILIDAD;
     }
 
     @Override
@@ -454,6 +454,12 @@ public class CotizacionServiceImpl implements CotizacionService {
             }
         }
         return costo;
+    }
+
+    @Override
+    public double getPesoVolumetrico(Detalle detalle) {
+        double pv = (detalle.getDimensiones().getAlto()*detalle.getDimensiones().getAncho()*detalle.getDimensiones().getLargo());
+        return (pv/5000 == 0) ? 1 : pv/5000;
     }
 
 

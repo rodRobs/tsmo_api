@@ -86,12 +86,13 @@ public class DocumentacionServiceImpl implements DocumentacionService {
 
             // Verfificamos si recoleccion hace TSMO
             documentacion.getOpciones().setTipoServicio("3");
+            /*
             if (coberturaService.existeCobertura(documentacion.getOrigen().getDomicilio().getCodigoPostal())) {
                 documentacion.getServicios().setServicio(TipoServicio.ORDINARIO.getValue());
             } else {
                 documentacion.getServicios().setServicio(TipoServicio.RECOLECCION_A_DOMICILIO.getValue());
             }
-
+            */
             Invocation.Builder solicitud = target.request();
             String encodedString = Base64.getEncoder().encodeToString((EnviaAuth.USER.toString()+":"+EnviaAuth.PASS.toString()).getBytes());
             // String encodedString = Base64.getEncoder().encodeToString((user+":"+pass).getBytes());
@@ -99,7 +100,6 @@ public class DocumentacionServiceImpl implements DocumentacionService {
             documentacion.setCuenta(EnviaAuth.CLIENTE.toString());
             solicitud.header("Authorization", "Basic "+encodedString);
             solicitud.header("Content-Type", "application/json");
-
             Gson gson = new Gson();
             String jsonString = gson.toJson(documentacion);
 

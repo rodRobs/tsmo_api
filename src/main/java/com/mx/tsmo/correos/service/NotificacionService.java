@@ -41,10 +41,12 @@ public class NotificacionService {
     private static final String ASUNTO_ENVIO = "TSMO: No Guía  de Envío";
     private static final String ASUNTO_ALTA_OPERADOR = "TSMO: Datos de acceso a sistema de TSMO";
 
-    //private static final String path = "/Users/Joshue/Desktop/";
-    private static final String path = "C:/Users/Administrador/Documents/";
+    private static final String path = "/Users/Joshue/Desktop/";
+    //private static final String path = "C:/Users/Administrador/Documents/";
     
     private static final String nombreFinalEnvio = "formato_envio";
+
+    private static final String CORREO = "credito.cobranza@tsmo.com.mx";
 
     @Autowired
     public NotificacionService(JavaMailSender javaMailSender) { this.javaMailSender = javaMailSender; }
@@ -74,7 +76,7 @@ public class NotificacionService {
                     // mm.setFrom(new InternetAddress("avisos@tsmo.com.mx"));
 
                     log.info("Entra al prepare");
-                    mm.setFrom(new InternetAddress("avisos@tsmo.com.mx"));
+                    mm.setFrom(new InternetAddress(CORREO));
                     mm.setSubject(ASUNTO_ENVIO);
                     mm.setText(mensaje);
 
@@ -84,7 +86,7 @@ public class NotificacionService {
                     helper.setText(mensaje, true);
                     helper.setSubject((tipoCorreo == TipoEnvioCorreo.ENVIO.getValue()) ? ASUNTO_ENVIO : ASUNTO_ALTA_OPERADOR);
                     // helper.setSubject(ASUNTO_ENVIO);
-                    helper.setFrom(new InternetAddress("avisos@tsmo.com.mx"));
+                    helper.setFrom(new InternetAddress(CORREO));
                     javaMailSender.send(mm);
                 } catch (Exception e) {
 

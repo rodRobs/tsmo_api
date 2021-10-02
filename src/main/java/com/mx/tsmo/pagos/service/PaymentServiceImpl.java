@@ -20,7 +20,6 @@ public class PaymentServiceImpl implements PaymentService {
     @Value("${stripe.key.secret}")
     String secretKey;
 
-
     @Override
     public PaymentIntent paymentIntent(PaymentIntentDto paymentIntentDto) throws StripeException {
         Stripe.apiKey = secretKey;
@@ -31,10 +30,8 @@ public class PaymentServiceImpl implements PaymentService {
         params.put("amount", paymentIntentDto.getAmount());
         params.put("currency", paymentIntentDto.getCurrency());
         params.put("description", paymentIntentDto.getDescription());
-        params.put(
-                "payment_method_types",
-                paymentMethodTypes
-        );
+        //params.put("number", paymentIntentDto.)
+        params.put("payment_method_types", paymentMethodTypes);
         return PaymentIntent.create(params);
     }
 
@@ -45,6 +42,8 @@ public class PaymentServiceImpl implements PaymentService {
             PaymentIntent paymentIntent = PaymentIntent.retrieve(id);
             Map<String, Object> params = new HashMap<>();
             params.put("payment_method", "pm_card_visa");
+            // params.put("type", "card");
+
             paymentIntent.confirm(params);
             return paymentIntent;
         } catch (StripeException se) {

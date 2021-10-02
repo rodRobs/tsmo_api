@@ -31,5 +31,7 @@ public class Opciones implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "create_at", nullable = false)
     private Date createAt;
+    @Column(length = 3)
+    private String tipoRecoleccion;
 
 }

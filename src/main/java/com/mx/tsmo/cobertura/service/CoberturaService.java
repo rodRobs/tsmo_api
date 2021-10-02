@@ -7,5 +7,6 @@ public interface CoberturaService {
 
     public CoberturaResponse[] coberturaENVIA(CoberturaPost cobertura);
     public CoberturaResponse coberturaTSMO(CoberturaPost cobertura);
+    boolean coberturaCP(String cp);
 
 }
