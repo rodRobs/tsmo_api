@@ -46,6 +46,9 @@ public class Cotizacion  {
     @JoinColumn(name = "id_cotizacion")
     private List<Servicio> servicios;
 
+    @OneToOne(mappedBy = "cotizacion")
+    private Costo costo;
+
     public String toString() {
         return "id: " + id + "\n"
                 + " cuenta: " + cuenta + "\n"

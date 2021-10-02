@@ -6,6 +6,8 @@ import com.mx.tsmo.cotizacion.model.domain.Detalle;
 import com.mx.tsmo.cotizacion.model.domain.Servicio;
 import com.mx.tsmo.cotizacion.model.dto.CargaDto;
 import com.mx.tsmo.domain.dtos.CotizacionDto;
+import com.mx.tsmo.envios.model.domain.Envio;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
@@ -34,6 +36,8 @@ public interface CotizacionService {
     double calculoCostoFinal(Cotizacion cotizacion, double costo);
     double calculoCostoFinalTSMO(Cotizacion cotizacion, double costo);
     double getPesoVolumetrico(Detalle detalle);
+    List<Envio> cotizaciones(List<Envio> envio);
+    Costo realizarCotizacion(Cotizacion cotizacion);
 
 }
 

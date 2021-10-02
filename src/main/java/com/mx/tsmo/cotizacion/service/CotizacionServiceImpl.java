@@ -11,8 +11,11 @@ import com.mx.tsmo.enums.TipoTraslado;
 import com.mx.tsmo.domain.dtos.CajaDto;
 import com.mx.tsmo.cotizacion.model.dto.CargaDto;
 import com.mx.tsmo.domain.dtos.CotizacionDto;
+import com.mx.tsmo.envios.model.domain.Envio;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,6 +46,12 @@ public class CotizacionServiceImpl implements CotizacionService {
     private CotizacionRepository cotizacionRepository;
 
     private CargaServiceImpl cargaService;
+
+    @Autowired
+    private CoberturaTSMOService coberturaTSMOService;
+
+    @Autowired
+    private CostoService costoService;
 
     @Autowired
     private CargaNormalLocalService cargaNormalLocalService;
@@ -441,15 +450,18 @@ public class CotizacionServiceImpl implements CotizacionService {
 
     @Override
     public double calculoCostoFinalTSMO(Cotizacion cotizacion, double costo) {
-        if (cotizacion.getServicios().size() > 0) {
-            for (Servicio servicio : cotizacion.getServicios()) {
-                switch(servicio.getServicio()) {
-                    case "SEG":
-                        costo = costo + SEGURO;
-                        break;
-                    case "RDO":
-                        costo = costo + RECOLECCION;
-                        break;
+        //log.info("cotizacion: "+cotizacion.toString());
+        if (cotizacion.getServicios() != null) {
+            if (cotizacion.getServicios().size() > 0 || !cotizacion.getServicios().isEmpty()) {
+                for (Servicio servicio : cotizacion.getServicios()) {
+                    switch (servicio.getServicio()) {
+                        case "SEG":
+                            costo = costo + SEGURO;
+                            break;
+                        case "RDO":
+                            costo = costo + RECOLECCION;
+                            break;
+                    }
                 }
             }
         }
@@ -461,6 +473,63 @@ public class CotizacionServiceImpl implements CotizacionService {
         double pv = (detalle.getDimensiones().getAlto()*detalle.getDimensiones().getAncho()*detalle.getDimensiones().getLargo());
         return (pv/5000 == 0) ? 1 : pv/5000;
     }
+
+    @Override
+    public List<Envio> cotizaciones(List<Envio> envios) {
+        log.info("Entra a servicio para cotizar masivamente");
+        int count = 0;
+        for (Envio envio : envios) {
+            log.info("Envio numero: "+count++);
+            if (!envio.getDocumentacion().getCotizacion().getDetalle().isEmpty()) {
+                envio.getDocumentacion().getCotizacion().setCosto(this.realizarCotizacion(envio.getDocumentacion().getCotizacion()));
+            }
+        }
+        return envios;
+    }
+
+    /*
+     * Funcion para realizar cotizacion local o foranea
+     * Almacena Costo en BD y regresa costo en caso de ser exitoso la cotizacion
+     * Regresa mensaje de Error caso contrario
+     * */
+    @Override
+    public Costo realizarCotizacion(Cotizacion cotizacion) {
+        Costo costo = new Costo();
+        // double distancia = cotizacionService.getDistancia(cotizacionService.URL_Google_Cotizacion(cotizacion));
+        //int tipoDistancia = cotizacionService.getTipoDistancia(distancia, cotizacion);
+
+        double peso = this.getPeso(cotizacion.getDetalle().get(0));
+        int tipoCarga = this.getTipoCarga(peso);
+        if (coberturaTSMOService.local(cotizacion.getOrigen().getDomicilio().getCodigoPostal(), cotizacion.getDestino().getDomicilio().getCodigoPostal())) {
+            log.info("Cotizacion Local");
+            costo = this.seleccionarServicioCosto(tipoCarga,(int) peso);
+            costo.setTipoServicio("ESTÁNDAR NACIONAL");
+            costo.setFCompromisoEntrega("1 a 4 días hábiles");
+            costo.setRealiza("TSMO");
+            costo.setPesoVolumetrico(this.getPesoVolumetrico(cotizacion.getDetalle().get(0)));
+            costo.setCostoTotal(this.calculoCostoFinalTSMO(cotizacion, costo.getCostoTotal()));
+        } else {
+            //return new ResponseEntity("TSMO no tiene cobertura en los codigos postales solicitados", HttpStatus.BAD_REQUEST);
+            return null;
+        }
+
+        if (costo == null) {
+            return null;
+        }
+
+        cotizacion.setRealiza(costo.getRealiza());
+        log.info("Cotizacion: "+cotizacion.toString());
+        // Cotizacion cotizacionBD = this.guardar(cotizacion);
+        //costo.setCotizacion(cotizacionBD);
+        //Costo costoBD = costoService.guardar(costo);
+
+        return costo;
+
+
+    }
+
+
+
 
 
 }
