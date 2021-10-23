@@ -397,5 +397,32 @@ public class EnvioServiceImpl implements EnvioService {
         }
     }
 
+    @Override
+    public String generaGuia(int sumarle) {
+        log.info("Entra a servicio para generear guia");
+        //log.info("Proveedor: "+proveedor);
+        String busquedaProveedor = TSM + "O";
+        /*String paquete = "";
+        switch (proveedor) {
+            case "TSMO":
+                busquedaProveedor = TSM + TSMO;
+                break;
+            case "ENVIA":
+                busquedaProveedor = TSM + ENVIA;
+                break;
+        }*/
+        log.info("busquedaProveedor: "+busquedaProveedor);
+        //int contador = envioDao.findAll().size();
+        int contador = envioDao.findByGuiaTsmoContaining(busquedaProveedor).size();
+        log.info(""+contador);
+        contador += sumarle;
+        log.info(""+contador);
+        String guia = busquedaProveedor + "0" + this.agregarCeros(contador);
+
+        log.info("GUIA: " + guia);
+
+        return guia;
+    }
+
 
 }

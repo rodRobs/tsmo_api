@@ -56,6 +56,10 @@ public class Envio implements Serializable {
 
     private int etapa;
 
+    @ManyToOne
+    @JoinColumn(name = "id_granel", nullable = true)
+    private EnviosGranel granel;
+
     @OneToOne
     @JoinColumn(name = "id_usuario")
     private Usuario usuario;

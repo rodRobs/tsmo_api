@@ -39,4 +39,9 @@ public class Detalle implements Serializable {
         return "Valor Declarado: " + valorDeclarado +
                 "Dimensiones: " + dimensiones;
     }
+
+    @PrePersist
+    public void setCreate_At() {
+        createAt = new Date();
+    }
 }

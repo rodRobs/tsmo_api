@@ -34,4 +34,9 @@ public class Opciones implements Serializable {
     @Column(length = 3)
     private String tipoRecoleccion;
 
+    @PrePersist
+    public void setCreate_At() {
+        createAt = new Date();
+    }
+
 }

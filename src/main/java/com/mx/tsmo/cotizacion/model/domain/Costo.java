@@ -58,4 +58,9 @@ public class Costo implements Serializable {
     private Date createAt;
     private String realiza;
     private String fCompromisoEntrega;
+
+    @PrePersist
+    public void setCreate_At() {
+        createAt = new Date();
+    }
 }

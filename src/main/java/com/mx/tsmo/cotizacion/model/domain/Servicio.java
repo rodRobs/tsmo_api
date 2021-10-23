@@ -32,4 +32,9 @@ public class Servicio implements Serializable {
                 " create_at = " + createAt;
     }
 
+    @PrePersist
+    public void setCreate_At() {
+        createAt = new Date();
+    }
+
 }

@@ -48,5 +48,6 @@ public interface EnvioService {
     List<Envio> buscarPorDestino(String destino);
     List<Integer> listaConteoEnviosAnuales();
     Envio buscarPorGuiaProveedor(String guia);
+    String generaGuia(int sumarle);
 
 }

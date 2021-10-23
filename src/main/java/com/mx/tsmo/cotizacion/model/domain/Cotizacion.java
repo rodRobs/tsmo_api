@@ -46,7 +46,7 @@ public class Cotizacion  {
     @JoinColumn(name = "id_cotizacion")
     private List<Servicio> servicios;
 
-    @OneToOne(mappedBy = "cotizacion")
+    @OneToOne(mappedBy = "cotizacion", cascade = {CascadeType.ALL})
     private Costo costo;
 
     public String toString() {
@@ -58,5 +58,10 @@ public class Cotizacion  {
                 + " detalle: " + detalle + "\n"
                 + " realiza: " + realiza + "\n"
                 + " servicios: " + servicios ;
+    }
+
+    @PrePersist
+    public void setCreate_At() {
+        createAt = new Date();
     }
 }

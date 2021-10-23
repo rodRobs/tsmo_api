@@ -7,6 +7,7 @@ import com.mx.tsmo.documentacion.model.domain.Documentacion;
 import com.mx.tsmo.documento.domain.dto.EnvioDoc;
 import com.mx.tsmo.documento.service.DocumentoService;
 import com.mx.tsmo.envios.model.domain.Envio;
+import com.mx.tsmo.envios.model.domain.EnviosGranel;
 import com.mx.tsmo.envios.model.domain.Rastreo;
 import com.mx.tsmo.envios.model.dto.CiudadesDto;
 import com.mx.tsmo.envios.model.dto.EnvioDto;
@@ -1097,5 +1098,22 @@ public class EnvioController {
         return fechas;
     }
     */
+
+    /*
+    * SERVICIO REST PARA GENERAR GUIAS DE VARIOS ENVIOS
+    * Metodo para realizar documentacion de los envios a granel
+    * @author Rodrigo Robles
+    * @param envioGranel EnviosGranel, Contiene la informacion para solicitar los envios a granel
+    * @return envioGranelReturn EnviosGranel, Regresa los envios con toda la informacion correspondiente de BD para su manejo
+    * */
+    @PostMapping("/envios/clientes")
+    public ResponseEntity<EnviosGranel> genarcionGuidsGranel(@RequestBody EnviosGranel envioGranel) {
+        log.info("Entra a servicio de controlador para generar guias de clientes para envios a granel");
+
+        for (int i = 0; i <= envioGranel.getEnvios().size(); i++) {
+            //envioGranel.getEnvios().get(0).setGuiaTsmo(envioService.generarGuia(envioGranel.getEnvios().get(0).getDocumentacion().getCotizacion().getRealiza()),);
+        }
+        return null;
+    }
 
 }
