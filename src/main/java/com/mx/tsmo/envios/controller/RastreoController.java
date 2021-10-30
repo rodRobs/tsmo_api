@@ -3,7 +3,9 @@ package com.mx.tsmo.envios.controller;
 import com.mx.tsmo.envios.model.domain.Cancelacion;
 import com.mx.tsmo.envios.model.domain.Envio;
 import com.mx.tsmo.envios.model.domain.Rastreo;
+import com.mx.tsmo.envios.model.dto.ActualizacionEtapaDto;
 import com.mx.tsmo.envios.model.dto.RastreoDto;
+import com.mx.tsmo.envios.model.dto.ResponseActualizacionEtapaDto;
 import com.mx.tsmo.envios.model.enums.EstadoEnvio;
 import com.mx.tsmo.envios.model.enums.EstadoPago;
 import com.mx.tsmo.envios.service.CancelacionService;
@@ -131,5 +133,93 @@ public class RastreoController {
             return new ResponseEntity("ERROR: No se encontraron los siguientes números de guías para actualizar el estado del envio: " + listaGuias, HttpStatus.BAD_REQUEST);
         }
         return ResponseEntity.ok("Se han actualizado los estados de los envios con éxito");
+    }
+
+
+    /*
+     * Actualizar estado de envio
+     * @param actualizacionEtapa: ActualizacionEtapaDto, lista de guias ingresadas para actualizar etapa de envio
+     * @return envios: List<Envios>, lista de envios actualizados */
+    @PostMapping("actualizar/etapa")
+    public ResponseEntity<ResponseActualizacionEtapaDto> actualizarEtapaEnvios(@RequestBody ActualizacionEtapaDto actualizacionEtapa) {
+        log.info("Entra a servicio para actualizar estado de los envios");
+        List<Envio> enviosEncontradas = new ArrayList();
+        List<String> enviosNoEncontradas = new ArrayList();
+        // Recorremos lista de guias para buscar envios
+        for (String guia : actualizacionEtapa.getGuias()) {
+            Envio envioBD = envioService.buscarPorGuiaTsmo(guia);
+            if (envioBD == null) {
+                enviosNoEncontradas.add(guia);
+            } else {
+                enviosEncontradas.add(envioBD);
+            }
+        }
+        List<Rastreo> rastreoAlmacenados = new ArrayList();
+        List<Rastreo> rastreoNoAlmacenados = new ArrayList();
+        // Recorremos envios encontrados para guardar rastreos
+        for (Envio envio : enviosEncontradas) {
+            Rastreo rastreo = Rastreo.builder()
+                    .descripcion(actualizacionEtapa.getDescripcion())
+                    .nombre(this.nombreEtapa(actualizacionEtapa.etapa))
+                    .envio(envio)
+                    .etapa(actualizacionEtapa.getEtapa())
+                    .latitud(actualizacionEtapa.latitud)
+                    .longitud(actualizacionEtapa.longitud)
+                    .build();
+            Rastreo rastreoBD = rastreoService.guardar(rastreo);
+            if (rastreoBD != null) {
+                rastreoAlmacenados.add(rastreoBD);
+            } else {
+                rastreoNoAlmacenados.add(rastreoBD);
+            }
+        }
+        /* Buscar obetener informacion en google a partir de las coordenadas */
+
+        return ResponseEntity.ok(ResponseActualizacionEtapaDto.builder().enviosEncontrados(enviosEncontradas).enviosNoEncontrados(enviosNoEncontradas).rastreosAlmacenados(rastreoAlmacenados).rastreosNoAlmacenados(rastreoNoAlmacenados).build());
+    }
+
+    /*
+     * Metodo para seleccionar nombre de la etapa a partir del numero
+     * @param etapa int numero de etapa a actualizar envio
+     * @return estado String nombre de la etapa
+     * */
+    public String nombreEtapa(int etapa) {
+        // Seleccionamos nombre de la etapa
+        switch (etapa) {
+            case 0:
+                return EstadoEnvio.PENDIENTE.toString();
+            //break;
+            case 1:
+                return EstadoEnvio.RECOLECCION.toString();
+            //break;
+            case 2:
+                return EstadoEnvio.ALMACEN.toString();
+            //break;
+            case 3:
+                return EstadoEnvio.TRANSITO.toString();
+            //break;
+            case 4:
+                return EstadoEnvio.ENTREGADO.toString();
+            //break;
+            case 5:
+                return EstadoEnvio.PRIMERA_ENTREGA_SIN_EXITO.toString();
+            //break;
+            case 6:
+                return EstadoEnvio.SEGUNDA_ENTREGA_SIN_EXITO.toString();
+            //break;
+            case 7:
+                return EstadoEnvio.TERCERA_ENTREGA_SIN_EXITO.toString();
+            //break;
+            case 8:
+                return EstadoEnvio.DEVUELTO.toString();
+            //break;
+            case 9:
+                return EstadoEnvio.CANCELADO.toString();
+            //break;
+            default:
+                return null;
+            //break;
+        }
+
     }
 }

@@ -1108,105 +1108,31 @@ public class EnvioController {
     * @param envioGranel EnviosGranel, Contiene la informacion para solicitar los envios a granel
     * @return envioGranelReturn EnviosGranel, Regresa los envios con toda la informacion correspondiente de BD para su manejo
     * */
-    @PostMapping("/envios/clientes")
-    public ResponseEntity<EnviosGranel> genarcionGuidsGranel(@RequestBody EnviosGranel envioGranel) {
+    @PostMapping("/envios/clientes/{cliente}")
+    public ResponseEntity<EnviosGranel> genarcionGuidsGranel(@RequestBody EnviosGranel envioGranel, @PathVariable("cliente") Long cliente) {
         log.info("Entra a servicio de controlador para generar guias de clientes para envios a granel");
-
+/*
         for (int i = 0; i <= envioGranel.getEnvios().size(); i++) {
-            String guia = envioService.generarGuia("O", "");
+            String guia = envioService.generarGuia("O", );
             //envioGranel.getEnvios().get(0).setGuiaTsmo(envioService.generarGuia(envioGranel.getEnvios().get(0).getDocumentacion().getCotizacion().getRealiza()),);
+        }
+*/
+        for (Envio envio : envioGranel.getEnvios()) {
+            String guia = envioService.generarGuia("O", (envio.getDocumentacion().getCotizacion().getOpciones().getTipoEnvio()));
+            envio.setGuiaTsmo(guia);
+            Envio envioBD = envioService.guardar(envio);
+            if (envioBD == null) {
+
+            }
         }
         return null;
     }
 
-    /*
-    * Actualizar estado de envio
-    * @param actualizacionEtapa: ActualizacionEtapaDto, lista de guias ingresadas para actualizar etapa de envio
-    * @return envios: List<Envios>, lista de envios actualizados */
-    @PostMapping("actualizar/etapa")
-    public ResponseEntity<ResponseActualizacionEtapaDto> actualizarEtapaEnvios(@RequestBody ActualizacionEtapaDto actualizacionEtapa) {
-        log.info("Entra a servicio para actualizar estado de los envios");
-        List<Envio> enviosEncontradas = new ArrayList();
-        List<String> enviosNoEncontradas = new ArrayList();
-        // Recorremos lista de guias para buscar envios
-        for (String guia : actualizacionEtapa.getGuias()) {
-            Envio envioBD = envioService.buscarPorGuiaTsmo(guia);
-            if (envioBD == null) {
-                enviosNoEncontradas.add(guia);
-            } else {
-                enviosEncontradas.add(envioBD);
-            }
-        }
-        List<Rastreo> rastreoAlmacenados = new ArrayList();
-        List<Rastreo> rastreoNoAlmacenados = new ArrayList();
-        // Recorremos envios encontrados para guardar rastreos
-        for (Envio envio : enviosEncontradas) {
-            Rastreo rastreo = Rastreo.builder()
-                    .descripcion(actualizacionEtapa.getDescripcion())
-                    .nombre(this.nombreEtapa(actualizacionEtapa.etapa))
-                    .envio(envio)
-                    .etapa(actualizacionEtapa.getEtapa())
-                    .latitud(actualizacionEtapa.latitud)
-                    .longitud(actualizacionEtapa.longitud)
-                    .build();
-            Rastreo rastreoBD = rastreoService.guardar(rastreo);
-            if (rastreoBD != null) {
-                rastreoAlmacenados.add(rastreoBD);
-            } else {
-                rastreoNoAlmacenados.add(rastreoBD);
-            }
-        }
 
 
-        /* Buscar obetener informacion en google a partir de las coordenadas */
 
-        return ResponseEntity.ok(ResponseActualizacionEtapaDto.builder().enviosEncontrados(enviosEncontradas).enviosNoEncontrados(enviosNoEncontradas).rastreosAlmacenados(rastreoAlmacenados).rastreosNoAlmacenados(rastreoNoAlmacenados).build());
-    }
 
-    /*
-    * Metodo para seleccionar nombre de la etapa a partir del numero
-    * @param etapa int numero de etapa a actualizar envio
-    * @return estado String nombre de la etapa
-    * */
-    public String nombreEtapa(int etapa) {
-        // Seleccionamos nombre de la etapa
-        switch (etapa) {
-            case 0:
-                return EstadoEnvio.PENDIENTE.toString();
-                //break;
-            case 1:
-                return EstadoEnvio.RECOLECCION.toString();
-                //break;
-            case 2:
-                return EstadoEnvio.ALMACEN.toString();
-                //break;
-            case 3:
-                return EstadoEnvio.TRANSITO.toString();
-                //break;
-            case 4:
-                return EstadoEnvio.ENTREGADO.toString();
-                //break;
-            case 5:
-                return EstadoEnvio.PRIMERA_ENTREGA_SIN_EXITO.toString();
-                //break;
-            case 6:
-                return EstadoEnvio.SEGUNDA_ENTREGA_SIN_EXITO.toString();
-                //break;
-            case 7:
-                return EstadoEnvio.TERCERA_ENTREGA_SIN_EXITO.toString();
-                //break;
-            case 8:
-                return EstadoEnvio.DEVUELTO.toString();
-                //break;
-            case 9:
-                return EstadoEnvio.CANCELADO.toString();
-                //break;
-            default:
-                return null;
-                //break;
-        }
 
-    }
 
     /*
      * Metodo para seleccionar tipo de paquete para generar guia
