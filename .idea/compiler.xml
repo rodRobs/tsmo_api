@@ -10,6 +10,7 @@
         <module name="crud" />
         <module name="tsmo-back" />
         <module name="tutorial_jwt_BACK-master" />
+        <module name="tsmo_api" />
       </profile>
     </annotationProcessing>
   </component>
@@ -17,6 +18,7 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="crud" options="-parameters" />
       <module name="tsmo-back" options="-parameters" />
+      <module name="tsmo_api" options="-parameters" />
       <module name="tutorial_jwt_BACK-master" options="-parameters" />
     </option>
   </component>

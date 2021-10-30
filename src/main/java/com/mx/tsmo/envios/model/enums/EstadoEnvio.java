@@ -15,7 +15,13 @@ public enum EstadoEnvio {
 
     private final int value;
 
-    private EstadoEnvio(int value) {
+    EstadoEnvio(int value) {
         this.value = value;
     }
+
+    public int getValue() {
+        return value;
+    }
+
+
 }
