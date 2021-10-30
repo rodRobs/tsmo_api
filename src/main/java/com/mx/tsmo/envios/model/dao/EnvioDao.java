@@ -88,4 +88,7 @@ public interface EnvioDao extends JpaRepository<Envio, Long>, EnvioCustomDao {
     // Envio Proveedor
     Envio findByGuiaProveedor(String guiaProveedor);
 
+    // Comprobar si existe envio con ese numero de guia
+    boolean existsEnvioByGuiaTsmo(String guia);
+
 }
