@@ -39,4 +39,9 @@ public class Destino implements Serializable {
     @Column(name = "create_at", nullable = false)
     private Date createAt;
 
+    @PrePersist
+    public void setCreate_At() {
+        createAt = new Date();
+    }
+
 }

@@ -36,4 +36,6 @@ public class Telefono implements Serializable {
                 "id: " + id;
     }
 
+
+
 }

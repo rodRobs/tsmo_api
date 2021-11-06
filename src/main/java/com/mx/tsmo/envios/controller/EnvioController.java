@@ -1116,8 +1116,9 @@ public class EnvioController {
     * @param envioGranel EnviosGranel, Contiene la informacion para solicitar los envios a granel
     * @return envioGranelReturn EnviosGranel, Regresa los envios con toda la informacion correspondiente de BD para su manejo
     * */
-    @PostMapping("/clientes/{cliente}")
-    public ResponseEntity<EnviosGranel> genarcionGuidsGranel(@RequestBody EnviosGranel envioGranel, @PathVariable("cliente") String cliente) {
+    // @PostMapping("/clientes/{cliente}")
+    @PostMapping("/clientes/")
+    public ResponseEntity<EnviosGranel> genarcionGuidsGranel(@RequestBody EnviosGranel envioGranel/*, @PathVariable("cliente") String cliente*/) {
         log.info("Entra a servicio de controlador para generar guias de clientes para envios a granel");
 /*
         for (int i = 0; i <= envioGranel.getEnvios().size(); i++) {
@@ -1125,34 +1126,47 @@ public class EnvioController {
             //envioGranel.getEnvios().get(0).setGuiaTsmo(envioService.generarGuia(envioGranel.getEnvios().get(0).getDocumentacion().getCotizacion().getRealiza()),);
         }
 */
-        Usuario usuarioBD = usuarioService.getByNombreUsuario(cliente);
+        log.info("Buscar cliente: "+envioGranel.getCliente().getNombre());
+        Usuario usuarioBD = usuarioService.getByNombreUsuario(envioGranel.getCliente().getNombre());
         if (usuarioBD == null) {
             String msg = "ERROR: No se encontro usuario";
             return new ResponseEntity(msg, HttpStatus.BAD_REQUEST);
         }
         envioGranel.setCliente(usuarioBD.getCliente());
+        // Guardamos envios a granel
+        EnviosGranel enviosGranelBD = enviosGranelService.guardar(envioGranel);
+        if (enviosGranelBD == null) {
+            String msg = "ERROR: No se pudo guardar el rnvio a granel";
+            return new ResponseEntity(msg, HttpStatus.BAD_REQUEST);
+        }
         List<Envio> enviosGuardados = new ArrayList();
+        int contadorEnvios = 0;
+        // for (int i = 0; i < envioGranel.getEnvios().size(); i++) {
         for (Envio envio : envioGranel.getEnvios()) {
-            String guia = envioService.generarGuia("O", (envio.getDocumentacion().getCotizacion().getOpciones().getTipoEnvio()));
+            String guia = envioService.generarGuia("TSMO", (envio.getDocumentacion().getCotizacion().getOpciones().getTipoEnvio().equalsIgnoreCase("P")) ? "0" : "1");
+            log.info("Envio posicion: "+contadorEnvios);
+            log.info("Se ha generado la guia: "+guia);
             envio.setGuiaTsmo(guia);
+            envio.setCliente(envioGranel.getCliente());
+            envio.setEstadoEnvio(EstadoEnvio.PENDIENTE.toString());
+            envio.setGranel(enviosGranelBD);
+            // envio
             Envio envioBD = envioService.guardar(envio);
             if (envioBD == null) {
                 enviosGuardados.add(envioBD);
+            } else {
+                log.error("ERROR: No se puede guardar: "+envio.getGuiaTsmo());
             }
         }
         envioGranel.setEnvios(enviosGuardados);
-        EnviosGranel enviosGranelBD = enviosGranelService.guardar(envioGranel);
+
         if (enviosGranelBD == null) {
             log.info("No se pudo almacenar los envios a granel");
             return new ResponseEntity("No se pudo almacenar los envios a granel", HttpStatus.BAD_REQUEST);
         }
+        log.info("Se han guardado");
         return ResponseEntity.ok(enviosGranelBD);
     }
-
-
-
-
-
 
 
     /*

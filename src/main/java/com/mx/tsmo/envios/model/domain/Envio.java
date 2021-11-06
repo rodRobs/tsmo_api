@@ -31,10 +31,10 @@ public class Envio implements Serializable {
     private String guiaTsmo;
     @Column(name = "numero_guia_proveedor", unique = true)
     private String guiaProveedor;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_documentacion")
     private Documentacion documentacion;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_cliente")
     private Cliente cliente;
     @Temporal(TemporalType.TIMESTAMP)
@@ -56,7 +56,7 @@ public class Envio implements Serializable {
 
     private int etapa;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_granel", nullable = true)
     private EnviosGranel granel;
 
@@ -71,5 +71,10 @@ public class Envio implements Serializable {
                 + " [cliente]: " + cliente.toString()
                 + " [estadoPago]: " + estadoPago
                 + " [estadoEnvio]: " + estadoEnvio;
+    }
+
+    @PrePersist
+    public void setCreate_At() {
+        createAt = new Date();
     }
  }

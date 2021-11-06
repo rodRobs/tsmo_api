@@ -28,11 +28,16 @@ public class Documentacion implements Serializable {
     /*@OneToOne
     @JoinColumn(name = "id_servicios")
     private Servicio servicios;*/
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_cotizacion")
     private Cotizacion cotizacion;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "create_at", nullable = false)
     private Date createAt;
+
+    @PrePersist
+    public void setCreate_At() {
+        createAt = new Date();
+    }
 }
