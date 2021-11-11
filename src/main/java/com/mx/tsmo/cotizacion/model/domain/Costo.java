@@ -31,7 +31,7 @@ public class Costo implements Serializable {
     @Column(nullable = true)
     private double peso;
     @Column(name = "peso_volumetrico", nullable = true)
-    private double pesoVolumetrico;
+    private Double pesoVolumetrico;
     @Column(nullable = true)
     private double volumen;
     @Column(nullable = true)

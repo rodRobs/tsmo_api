@@ -37,7 +37,7 @@ public class RastreoController {
     private CancelacionService cancelacionService;
 
     @GetMapping("/{guia}")
-    public ResponseEntity<Envio> rastrearEnvio(@PathVariable("guia") String guia, @RequestParam(value = "cte", required = false) Long cliente) {
+    public ResponseEntity<List<Rastreo>> rastrearEnvio(@PathVariable("guia") String guia, @RequestParam(value = "cte", required = false) Long cliente) {
         log.info("Entra a controlador para rastrear numero de guía");
         log.info("Cliente: "+cliente);
         Envio envio = envioService.buscarPorGuiaTsmo(guia);
@@ -52,17 +52,19 @@ public class RastreoController {
                 return  new ResponseEntity("ERROR: No se pudo completar la realización de la documentación del envío con éxito", HttpStatus.BAD_REQUEST);
             }
         }
-        log.info("EL envio no ha sido cancelado");
+
         if (envio.getEstadoEnvio() != null) {
             if (envio.getEstadoEnvio().equalsIgnoreCase(EstadoEnvio.CANCELADO.toString())) {
                 log.info("El envío con ese número de guía ha sido cancelado");
                 Cancelacion cancelacionBD = cancelacionService.buscarPorEnvio(envio);
                 return new ResponseEntity("ERROR: El envio fue cancelado con fecha y hora siguientes: " + cancelacionBD.getCreateAt() + " y comentario de cancelación siguiente: " + cancelacionBD.getComentario(), HttpStatus.BAD_REQUEST);
             }
+            log.info("EL envio no ha sido cancelado");
         }
         log.info("Regresamos envio");
+        String msg = "ERROR: No se puede mostrar información del envío";
         if (cliente != null) {
-            String msg = "ERROR: No se puede mostrar información del envío";
+
             log.info("Busca por cliente: "+cliente);
             if (envio.getUsuario() != null) {
                 log.info("Usuario en envio es diferente a cero");
@@ -73,8 +75,13 @@ public class RastreoController {
             } else {
                 return new ResponseEntity(msg, HttpStatus.BAD_REQUEST);
             }
+        } else {
+            log.info("No existe cliente con el envio");
+
+            // return new ResponseEntity(msg, HttpStatus.BAD_REQUEST);
         }
-        return ResponseEntity.ok(envio);
+
+        return ResponseEntity.ok(envio.getRastreos());
     }
 
     @PostMapping("/actualizar/{envio}")
@@ -143,21 +150,23 @@ public class RastreoController {
     @PostMapping("actualizar/etapa")
     public ResponseEntity<ResponseActualizacionEtapaDto> actualizarEtapaEnvios(@RequestBody ActualizacionEtapaDto actualizacionEtapa) {
         log.info("Entra a servicio para actualizar estado de los envios");
-        List<Envio> enviosEncontradas = new ArrayList();
+        List<String> enviosEncontradas = new ArrayList();
         List<String> enviosNoEncontradas = new ArrayList();
+        List<Envio> envios = new ArrayList();
         // Recorremos lista de guias para buscar envios
         for (String guia : actualizacionEtapa.getGuias()) {
-            Envio envioBD = envioService.buscarPorGuiaTsmo(guia);
-            if (envioBD == null) {
-                enviosNoEncontradas.add(guia);
+            boolean envioBD = envioService.existeEnvio(guia);
+            if (envioBD) {
+                enviosEncontradas.add(guia);
+                envios.add(envioService.buscarPorGuiaTsmo(guia));
             } else {
-                enviosEncontradas.add(envioBD);
+                enviosNoEncontradas.add(guia);
             }
         }
         List<Rastreo> rastreoAlmacenados = new ArrayList();
         List<Rastreo> rastreoNoAlmacenados = new ArrayList();
         // Recorremos envios encontrados para guardar rastreos
-        for (Envio envio : enviosEncontradas) {
+        for (Envio envio : envios) {
             Rastreo rastreo = Rastreo.builder()
                     .descripcion(actualizacionEtapa.getDescripcion())
                     .nombre(this.nombreEtapa(actualizacionEtapa.etapa))

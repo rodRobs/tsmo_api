@@ -47,4 +47,9 @@ public class ClienteServiceImpl implements ClienteService {
     public List<Cliente> listar() {
         return clienteDao.findAll();
     }
+
+    @Override
+    public Cliente buscarPorId(Long id) {
+        return clienteDao.findById(id).orElse(null);
+    }
 }

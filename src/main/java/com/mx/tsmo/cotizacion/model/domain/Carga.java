@@ -34,4 +34,6 @@ public class Carga implements Serializable {
     @Column(name = "precio_final")
     private double precioFinal;
 
+
+
 }

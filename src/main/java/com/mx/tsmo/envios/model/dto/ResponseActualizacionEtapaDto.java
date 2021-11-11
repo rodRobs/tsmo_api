@@ -12,7 +12,7 @@ import java.util.List;
 @Data @AllArgsConstructor @NoArgsConstructor @Builder
 public class ResponseActualizacionEtapaDto {
 
-    private List<Envio> enviosEncontrados;
+    private List<String> enviosEncontrados;
     private List<String> enviosNoEncontrados;
     private List<Rastreo> rastreosAlmacenados;
     private List<Rastreo> rastreosNoAlmacenados;

@@ -8,5 +8,6 @@ import java.util.List;
 public interface ClienteDao extends JpaRepository<Cliente, Long> {
 
     List<Cliente> findByCorreo(String correo);
+    // Cliente findByNombreUsuario(String nombreUsuario);
 
 }

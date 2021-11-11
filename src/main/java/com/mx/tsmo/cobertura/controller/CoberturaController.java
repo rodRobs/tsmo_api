@@ -43,8 +43,8 @@ public class CoberturaController {
             CoberturaResponse[] responses = {this.armarCoberturaResponseLocal()};
             return ResponseEntity.ok(responses);
         } else {
-            return new ResponseEntity("TSMO no tiene cobertura en los códigos postales ingresados.", HttpStatus.BAD_REQUEST);
-            // return ResponseEntity.ok(coberturaService.coberturaENVIA(cobertura));
+            // return new ResponseEntity("TSMO no tiene cobertura en los códigos postales ingresados.", HttpStatus.BAD_REQUEST);
+            return ResponseEntity.ok(coberturaService.coberturaENVIA(cobertura));
         }
     }
 

@@ -424,5 +424,8 @@ public class EnvioServiceImpl implements EnvioService {
         return guia;
     }
 
-
+    @Override
+    public boolean existeEnvio(String guia) {
+        return envioDao.existsEnvioByGuiaTsmo(guia);
+    }
 }

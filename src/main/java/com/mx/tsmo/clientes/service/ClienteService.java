@@ -10,5 +10,7 @@ public interface ClienteService {
     List<Cliente> buscarPorCorreo(String correo);
     Cliente clienteIguales(List<Cliente> clientesBD, Cliente clientePeticion);
     List<Cliente> listar();
+    Cliente buscarPorId(Long id);
+    // Cliente buscarPorNombreUsuario(String nombreUsuario);
 
 }
