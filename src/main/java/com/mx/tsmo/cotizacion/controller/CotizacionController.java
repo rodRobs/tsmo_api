@@ -125,8 +125,13 @@ public class CotizacionController {
             costo.setCostoTotal(cotizacionService.calculoCostoFinalTSMO(cotizacion, costo.getCostoTotal()));
         } /*else {
             return new ResponseEntity("TSMO no tiene cobertura en los codigos postales solicitados", HttpStatus.BAD_REQUEST);
+<<<<<<< HEAD
         }
 */
+=======
+        }*/
+
+>>>>>>> 911caf53bdccc210c9b899486906380c294282cf
         else {
             log.info("Cotizacion Foranea");
             Response post = enviaService.calcularEnvia(cotizacion, tipoCarga);
@@ -142,6 +147,7 @@ public class CotizacionController {
                         log.info(cotizacionResponse.toString());
                         costo = cotizacionResponse;
                         costo.setCostoTotal(cotizacionService.calculoCostoFinal(cotizacion, costo.getTotal()));
+                        costo.setPesoVolumetrico(cotizacionResponse.getVolumen());
                         costo.setRealiza("ENVIA");
                         // costo.setFCompromisoEntrega(cotizacionResponse.getCompromisoEntrega());
                     }

@@ -9,8 +9,8 @@
         <outputRelativeToContentRoot value="true" />
         <module name="crud" />
         <module name="tsmo-back" />
-        <module name="tsmo_api" />
         <module name="tutorial_jwt_BACK-master" />
+        <module name="tsmo_api" />
       </profile>
     </annotationProcessing>
   </component>
