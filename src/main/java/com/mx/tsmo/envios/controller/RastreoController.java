@@ -19,7 +19,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("rastreo")
@@ -150,21 +152,25 @@ public class RastreoController {
     @PostMapping("actualizar/etapa")
     public ResponseEntity<ResponseActualizacionEtapaDto> actualizarEtapaEnvios(@RequestBody ActualizacionEtapaDto actualizacionEtapa) {
         log.info("Entra a servicio para actualizar estado de los envios");
-        List<String> enviosEncontradas = new ArrayList();
-        List<String> enviosNoEncontradas = new ArrayList();
-        List<Envio> envios = new ArrayList();
+        Set<String> enviosEncontradas = new LinkedHashSet<String>();
+        Set<String> enviosNoEncontradas = new LinkedHashSet<String>();
+        Set<Envio> envios = new LinkedHashSet<Envio>();
         // Recorremos lista de guias para buscar envios
+        log.info("Recorremos lista de envios: "+actualizacionEtapa.guias.size());
         for (String guia : actualizacionEtapa.getGuias()) {
+            log.info("Guia para actualizar: " + guia);
             boolean envioBD = envioService.existeEnvio(guia);
             if (envioBD) {
+                log.info("Guia existe");
                 enviosEncontradas.add(guia);
                 envios.add(envioService.buscarPorGuiaTsmo(guia));
             } else {
+                log.info("Guia no existe: "+guia);
                 enviosNoEncontradas.add(guia);
             }
         }
-        List<Rastreo> rastreoAlmacenados = new ArrayList();
-        List<Rastreo> rastreoNoAlmacenados = new ArrayList();
+        Set<Rastreo> rastreoAlmacenados = new LinkedHashSet<>();
+        Set<Rastreo> rastreoNoAlmacenados = new LinkedHashSet<>();
         // Recorremos envios encontrados para guardar rastreos
         for (Envio envio : envios) {
             Rastreo rastreo = Rastreo.builder()
@@ -183,7 +189,7 @@ public class RastreoController {
             }
         }
         /* Buscar obetener informacion en google a partir de las coordenadas */
-
+        log.info("Regresa");
         return ResponseEntity.ok(ResponseActualizacionEtapaDto.builder().enviosEncontrados(enviosEncontradas).enviosNoEncontrados(enviosNoEncontradas).rastreosAlmacenados(rastreoAlmacenados).rastreosNoAlmacenados(rastreoNoAlmacenados).build());
     }
 

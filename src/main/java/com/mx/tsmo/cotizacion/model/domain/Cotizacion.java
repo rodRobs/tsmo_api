@@ -1,5 +1,6 @@
 package com.mx.tsmo.cotizacion.model.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -46,6 +47,7 @@ public class Cotizacion  {
     @JoinColumn(name = "id_cotizacion")
     private List<Servicio> servicios;
 
+    @JsonIgnore
     @OneToOne(mappedBy = "cotizacion", cascade = {CascadeType.ALL})
     private Costo costo;
 

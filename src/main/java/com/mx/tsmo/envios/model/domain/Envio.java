@@ -1,5 +1,6 @@
 package com.mx.tsmo.envios.model.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mx.tsmo.clientes.model.domain.Cliente;
 import com.mx.tsmo.cotizacion.model.domain.Opciones;
 import com.mx.tsmo.cotizacion.model.domain.Telefono;
@@ -56,6 +57,7 @@ public class Envio implements Serializable {
 
     private int etapa;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_granel", nullable = true)
     private EnviosGranel granel;

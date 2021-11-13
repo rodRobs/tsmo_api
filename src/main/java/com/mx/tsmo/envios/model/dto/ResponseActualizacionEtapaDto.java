@@ -8,13 +8,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Set;
 
 @Data @AllArgsConstructor @NoArgsConstructor @Builder
 public class ResponseActualizacionEtapaDto {
 
-    private List<String> enviosEncontrados;
-    private List<String> enviosNoEncontrados;
-    private List<Rastreo> rastreosAlmacenados;
-    private List<Rastreo> rastreosNoAlmacenados;
+    private Set<String> enviosEncontrados;
+    private Set<String> enviosNoEncontrados;
+    private Set<Rastreo> rastreosAlmacenados;
+    private Set<Rastreo> rastreosNoAlmacenados;
 
 }

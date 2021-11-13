@@ -50,8 +50,8 @@ public class DocumentacionServiceImpl implements DocumentacionService {
 
             ResteasyClient client = new ResteasyClientBuilder().build();
 
-            WebTarget target = client.target(EnviaAuth.URL.toString()+PRE_DOCUMENTACION);
-            // WebTarget target = client.target(EnviaAuth.URL_PROD.toString()+PRE_DOCUMENTACION);
+            // WebTarget target = client.target(EnviaAuth.URL.toString()+PRE_DOCUMENTACION);
+            WebTarget target = client.target(EnviaAuth.URL_PROD.toString()+PRE_DOCUMENTACION);
 
             String cliente = "";
             String user = "";
@@ -94,8 +94,8 @@ public class DocumentacionServiceImpl implements DocumentacionService {
             }
             */
             Invocation.Builder solicitud = target.request();
-            String encodedString = Base64.getEncoder().encodeToString((EnviaAuth.USER.toString()+":"+EnviaAuth.PASS.toString()).getBytes());
-            // String encodedString = Base64.getEncoder().encodeToString((user+":"+pass).getBytes());
+            // String encodedString = Base64.getEncoder().encodeToString((EnviaAuth.USER.toString()+":"+EnviaAuth.PASS.toString()).getBytes());
+            String encodedString = Base64.getEncoder().encodeToString((user+":"+pass).getBytes());
             //documentacion.setCuenta(cliente);
             documentacion.setCuenta(EnviaAuth.CLIENTE.toString());
             solicitud.header("Authorization", "Basic "+encodedString);
